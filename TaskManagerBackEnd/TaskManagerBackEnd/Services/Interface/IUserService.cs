@@ -1,13 +1,14 @@
 using TaskManagerBackEnd.DTOs.User;
-using TaskManagerBackend.Models;
+using TaskManagerBackEnd.Helpers;
 
-namespace TaskManagerBackend.Services.Interface;
-
-public interface IUserService
+namespace TaskManagerBackend.Services.Interface
 {
-    Task<IEnumerable<UserResponseDto>> GetAllUsersAsync();
-    Task<UserResponseDto?> GetUserByIdAsync(int id);
-    Task CreateUserAsync(UserCreateDto userCreateDto);
-    Task UpdateUserAsync(int id, UserUpdateDto userUpdateDto);
-    Task DeleteUserAsync(int id);
+    public interface IUserService
+    {
+        Task<ApiResponse<IEnumerable<UserResponseDto>>> GetAllUsersAsync();
+        Task<ApiResponse<UserResponseDto>> GetUserByIdAsync(int id);
+        Task<ApiResponse<UserResponseDto>> CreateUserAsync(UserCreateDto userCreateDto);
+        Task<ApiResponse<UserResponseDto>> UpdateUserAsync(int id, UserUpdateDto userUpdateDto);
+        Task<ApiResponse<string>> DeleteUserAsync(int id);
+    }
 }

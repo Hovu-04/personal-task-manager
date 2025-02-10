@@ -1,64 +1,91 @@
 using AutoMapper;
 using TaskManagerBackEnd.DTOs.User;
 using TaskManagerBackend.Helpers;
+using TaskManagerBackEnd.Helpers;
 using TaskManagerBackend.Models;
 using TaskManagerBackend.Repositories;
 using TaskManagerBackend.Services.Interface;
 
-namespace TaskManagerBackend.Services;
-
-public class UserService : IUserService
+namespace TaskManagerBackend.Services
 {
-    private readonly IRepository<User> _userRepository;
-    private readonly IMapper _mapper;
-
-    public UserService(IRepository<User> userRepository, IMapper mapper)
+    public class UserService : IUserService
     {
-        _userRepository = userRepository;
-        _mapper = mapper;
-    }
+        private readonly IRepository<User> _userRepository;
+        private readonly IMapper _mapper;
 
-    public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync()
-    {
-        var users = await _userRepository.GetAllAsync();
-        return _mapper.Map<IEnumerable<UserResponseDto>>(users);
-    }
-
-    public async Task<UserResponseDto?> GetUserByIdAsync(int id)
-    {
-        var user = await _userRepository.GetByIdAsync(id);
-        return _mapper.Map<UserResponseDto>(user);
-    }
-
-    public async Task CreateUserAsync(UserCreateDto userCreateDto)
-    {
-        var user = _mapper.Map<User>(userCreateDto);
-        user.PasswordHash = BCryptHelper.HashPassword(userCreateDto.Password);
-        await _userRepository.AddAsync(user);
-    }
-
-    public async Task UpdateUserAsync(int id, UserUpdateDto userUpdateDto)
-    {
-        var existingUser = await _userRepository.GetByIdAsync(id);
-        if (existingUser == null)
-            throw new KeyNotFoundException("User not found");
-
-        // Ánh xạ dữ liệu từ DTO vào entity
-        _mapper.Map(userUpdateDto, existingUser);
-        
-        existingUser.CreatedAt = DateTime.SpecifyKind(existingUser.CreatedAt, DateTimeKind.Utc);
-    
-        // Nếu LastLogin có giá trị, chuyển nó sang Utc
-        if (existingUser.LastLogin.HasValue)
+        public UserService(IRepository<User> userRepository, IMapper mapper)
         {
-            existingUser.LastLogin = DateTime.SpecifyKind(existingUser.LastLogin.Value, DateTimeKind.Utc);
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        await _userRepository.UpdateAsync(existingUser);
-    }
+        public async Task<ApiResponse<IEnumerable<UserResponseDto>>> GetAllUsersAsync()
+        {
+            var users = await _userRepository.GetAllAsync();
+            if (users == null || !users.Any())
+            {
+                return ApiResponse<IEnumerable<UserResponseDto>>.ErrorResponse("No users found.", 404);
+            }
 
-    public async Task DeleteUserAsync(int id)
-    {
-        await _userRepository.DeleteAsync(id);
+            var result = _mapper.Map<IEnumerable<UserResponseDto>>(users);
+            return ApiResponse<IEnumerable<UserResponseDto>>.SuccessResponse(result, "Get list of users successfully.");
+        }
+
+        public async Task<ApiResponse<UserResponseDto>> GetUserByIdAsync(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return ApiResponse<UserResponseDto>.ErrorResponse($"No user found with ID: {id}.", 404);
+            }
+
+            var result = _mapper.Map<UserResponseDto>(user);
+            return ApiResponse<UserResponseDto>.SuccessResponse(result, "Get user information successfully.");
+        }
+
+        public async Task<ApiResponse<UserResponseDto>> CreateUserAsync(UserCreateDto userCreateDto)
+        {
+            var user = _mapper.Map<User>(userCreateDto);
+            // Mã hóa mật khẩu
+            user.PasswordHash = BCryptHelper.HashPassword(userCreateDto.Password);
+            await _userRepository.AddAsync(user);
+            var userResponse = _mapper.Map<UserResponseDto>(user);
+            return ApiResponse<UserResponseDto>.SuccessResponse(userResponse, "Created user successfully.");
+        }
+
+        public async Task<ApiResponse<UserResponseDto>> UpdateUserAsync(int id, UserUpdateDto userUpdateDto)
+        {
+            var existingUser = await _userRepository.GetByIdAsync(id);
+            if (existingUser == null)
+            {
+                return ApiResponse<UserResponseDto>.ErrorResponse("User does not exist.", 404);
+            }
+
+            // Ánh xạ dữ liệu từ DTO vào entity hiện có
+            _mapper.Map(userUpdateDto, existingUser);
+
+            // Đảm bảo CreatedAt và LastLogin có Kind là Utc (nếu cần)
+            existingUser.CreatedAt = DateTime.SpecifyKind(existingUser.CreatedAt, DateTimeKind.Utc);
+            if (existingUser.LastLogin.HasValue)
+            {
+                existingUser.LastLogin = DateTime.SpecifyKind(existingUser.LastLogin.Value, DateTimeKind.Utc);
+            }
+
+            await _userRepository.UpdateAsync(existingUser);
+            var updatedUser = _mapper.Map<UserResponseDto>(existingUser);
+            return ApiResponse<UserResponseDto>.SuccessResponse(updatedUser, "User updated successfully.");
+        }
+
+        public async Task<ApiResponse<string>> DeleteUserAsync(int id)
+        {
+            var existingUser = await _userRepository.GetByIdAsync(id);
+            if (existingUser == null)
+            {
+                return ApiResponse<string>.ErrorResponse($"No user found with ID: {id}.", 404);
+            }
+
+            await _userRepository.DeleteAsync(id);
+            return ApiResponse<string>.SuccessResponse("User was successfully deleted.", "User deleted successfully.");
+        }
     }
 }

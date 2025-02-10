@@ -24,8 +24,7 @@ namespace TaskManagerBackend.Helpers
             CreateMap<Category, CategoryResponseDto>();
             
             // 🟣 Map từ CategoryCreateDto -> Category
-            CreateMap<CategoryCreateDto, Category>()
-                .ForMember(dest => dest.UserId, opt => opt.Ignore());
+            CreateMap<CategoryCreateDto, Category>();
             
             // 🔴 Map từ CategoryUpdateDto -> Category
             CreateMap<CategoriesUpdateDto, Category>();

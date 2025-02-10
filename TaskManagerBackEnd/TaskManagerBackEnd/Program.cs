@@ -21,10 +21,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Đăng ký open generic repository
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
+builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 
 // Đăng ký IUserService
 builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 // Đăng ký AutoMapper và quét tất cả các assembly hiện có để tìm các Mapping Profile
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
