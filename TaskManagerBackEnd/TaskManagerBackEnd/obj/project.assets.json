@@ -3579,11 +3579,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/hovu/Project/Back-End/TaskManagerBackEnd/TaskManagerBackEnd/TaskManagerBackEnd.csproj",
+      "projectUniqueName": "/home/hovu/Project/personal-task-manager/TaskManagerBackEnd/TaskManagerBackEnd/TaskManagerBackEnd.csproj",
       "projectName": "TaskManagerBackEnd",
-      "projectPath": "/home/hovu/Project/Back-End/TaskManagerBackEnd/TaskManagerBackEnd/TaskManagerBackEnd.csproj",
+      "projectPath": "/home/hovu/Project/personal-task-manager/TaskManagerBackEnd/TaskManagerBackEnd/TaskManagerBackEnd.csproj",
       "packagesPath": "/home/hovu/.nuget/packages/",
-      "outputPath": "/home/hovu/Project/Back-End/TaskManagerBackEnd/TaskManagerBackEnd/obj/",
+      "outputPath": "/home/hovu/Project/personal-task-manager/TaskManagerBackEnd/TaskManagerBackEnd/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/hovu/.nuget/NuGet/NuGet.Config"

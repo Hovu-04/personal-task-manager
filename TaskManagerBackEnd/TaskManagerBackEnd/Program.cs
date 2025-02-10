@@ -27,7 +27,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 // Đăng ký AutoMapper và quét tất cả các assembly hiện có để tìm các Mapping Profile
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 var app = builder.Build();
 
 // Cấu hình pipeline HTTP request.

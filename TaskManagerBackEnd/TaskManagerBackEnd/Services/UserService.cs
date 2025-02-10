@@ -40,10 +40,20 @@ public class UserService : IUserService
     public async Task UpdateUserAsync(int id, UserUpdateDto userUpdateDto)
     {
         var existingUser = await _userRepository.GetByIdAsync(id);
-        if (existingUser == null) throw new KeyNotFoundException("User not found");
+        if (existingUser == null)
+            throw new KeyNotFoundException("User not found");
 
-        // Map dữ liệu từ DTO vào entity
+        // Ánh xạ dữ liệu từ DTO vào entity
         _mapper.Map(userUpdateDto, existingUser);
+        
+        existingUser.CreatedAt = DateTime.SpecifyKind(existingUser.CreatedAt, DateTimeKind.Utc);
+    
+        // Nếu LastLogin có giá trị, chuyển nó sang Utc
+        if (existingUser.LastLogin.HasValue)
+        {
+            existingUser.LastLogin = DateTime.SpecifyKind(existingUser.LastLogin.Value, DateTimeKind.Utc);
+        }
+
         await _userRepository.UpdateAsync(existingUser);
     }
 

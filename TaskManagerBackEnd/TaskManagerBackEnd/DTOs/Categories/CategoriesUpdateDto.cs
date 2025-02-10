@@ -2,7 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TaskManagerBackend.DTOs.Categories;
 
-public class CategoryCreateDto
+public class CategoriesUpdateDto
 {
+    [Required] public int Id { get; set; }
+
     [Required] [MaxLength(100)] public string Name { get; set; }
 }

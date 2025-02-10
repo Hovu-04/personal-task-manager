@@ -14,6 +14,6 @@ public class UserCreateDto
     public string Email { get; set; }
         
     [Required]
-    [MaxLength(6)]
+    [MaxLength(100)]
     public string Password { get; set; }
 }

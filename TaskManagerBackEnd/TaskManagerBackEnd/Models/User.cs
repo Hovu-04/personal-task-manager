@@ -32,7 +32,7 @@ namespace TaskManagerBackend.Models
         public string Role { get; set; } = "user";
     
         [Column("last_login")]
-        public DateTime? LastLogin { get; set; }
+        public DateTime? LastLogin { get; set; } = DateTime.UtcNow;
     
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

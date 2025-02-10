@@ -10,10 +10,12 @@ namespace TaskManagerBackend.Models
     public class Category
     {
         [Key] 
-        [Column("id")] public int Id { get; set; }
+        [Column("id")] 
+        public int Id { get; set; }
 
         [Required]
-        [Column("user_id")] public int UserId { get; set; }
+        [Column("user_id")] 
+        public int UserId { get; set; }
 
         [Required]
         [Column("name")]
