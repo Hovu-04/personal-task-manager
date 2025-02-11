@@ -54,20 +54,21 @@ public class CategoryService : ICategoryService
 
     public async Task<ApiResponse<CategoryResponseDto>> UpdateCategoryAsync(int id, CategoriesUpdateDto categoriesUpdateDto)
     {
-        var existingCategory = _categoryRepository.GetByIdAsync(id);
+        var existingCategory = await _categoryRepository.GetByIdAsync(id);
         if (existingCategory == null)
         {
             return ApiResponse<CategoryResponseDto>.ErrorResponse("Category does not exist.", 404);
         }
-        var category = _mapper.Map<Category>(categoriesUpdateDto);
-        await _categoryRepository.UpdateAsync(category);
-        var result = _mapper.Map<CategoryResponseDto>(category);
+
+        _mapper.Map(categoriesUpdateDto, existingCategory);
+        await _categoryRepository.UpdateAsync(existingCategory);
+        var result = _mapper.Map<CategoryResponseDto>(existingCategory);
         return ApiResponse<CategoryResponseDto>.SuccessResponse(result, "Category updated successfully.");
     }
 
     public async Task<ApiResponse<string>> DeleteCategoryByIdAsync(int id)
     {
-        var existingCategory = _categoryRepository.GetByIdAsync(id);
+        var existingCategory = await _categoryRepository.GetByIdAsync(id);
         if (existingCategory == null)
         {
             return ApiResponse<string>.ErrorResponse("Category does not exist.", 404);
