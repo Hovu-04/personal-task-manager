@@ -17,7 +17,7 @@ public class CategoriesController : ControllerBase
 
     // GET: api/categories
     [HttpGet]
-    public async Task<IActionResult> GetCategory()
+    public async Task<ActionResult<IEnumerable<CategoryResponseDto>>> GetCategory()
     {
         var response = await _categoryService.GetAllCategoryAsync();
         if (!response.Success)
@@ -27,7 +27,7 @@ public class CategoriesController : ControllerBase
 
     // GET: api/categories/{id}
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetCategoryById(int id)
+    public async Task<ActionResult<CategoryResponseDto>> GetCategoryById(int id)
     {
         var response = await _categoryService.GetCategoryByIdAsync(id);
         if (!response.Success) return NotFound(response);
@@ -36,7 +36,7 @@ public class CategoriesController : ControllerBase
 
     // POST: api/categories
     [HttpPost]
-    public async Task<IActionResult> CreateCategory([FromBody] CategoryCreateDto categoryCreateDto)
+    public async Task<ActionResult<CategoryResponseDto>> CreateCategory([FromBody] CategoryCreateDto categoryCreateDto)
     {
         var response = await _categoryService.CreateCategoryAsync(categoryCreateDto);
         if (response.Success)
@@ -49,7 +49,7 @@ public class CategoriesController : ControllerBase
 
     // PUT: api/categories/{id}
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoriesUpdateDto categoriesUpdateDto)
+    public async Task<ActionResult<CategoryResponseDto>> UpdateCategory(int id, [FromBody] CategoriesUpdateDto categoriesUpdateDto)
     {
         var response = await _categoryService.UpdateCategoryAsync(id, categoriesUpdateDto);
         if (!response.Success)
@@ -59,7 +59,7 @@ public class CategoriesController : ControllerBase
 
     // Delete: api/categories/{id}
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteCategory(int id)
+    public async Task<ActionResult<string>> DeleteCategory(int id)
     {
         var response = await _categoryService.DeleteCategoryByIdAsync(id);
         if (!response.Success) return NotFound(response);

@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TaskManagerBackEnd.Enums;
-using TaskStatus = TaskManagerBackEnd.Enums.TaskStatus;
 
 namespace TaskManagerBackend.Models
 {
@@ -26,20 +24,22 @@ namespace TaskManagerBackend.Models
         [Column("description")] 
         public string Description { get; set; }
 
-        [Required] 
+        [Required]
         [Column("priority")]
-        public TaskPriority Priority { get; set; }
-
-        [Required] 
-        [Column("due_date")] 
+        [MaxLength(10)]
+        public string Priority { get; set; } 
+        
+        [Column("due_date",TypeName = "timestamp with time zone")]
         public DateTime DueDate { get; set; }
 
-        [Column("status")] 
-        public TaskStatus Status { get; set; } = TaskStatus.Todo;
-
-        [Column("created_at")] 
+        [Column("created_at", TypeName = "timestamp with time zone")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
+        
+        [Required]
+        [Column("status")]
+        [MaxLength(20)]
+        public string Status { get; set; } = "todo"; 
+        
         // Navigation property: Task thuộc về một user
         [ForeignKey("UserId")] public User User { get; set; }
 

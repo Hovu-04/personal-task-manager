@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskManagerBackend.Models;
 
+
 namespace TaskManagerBackend.Data;
 
 public class AppDbContext : DbContext

@@ -1,6 +1,7 @@
 using AutoMapper;
 using TaskManagerBackend.DTOs.Categories;
 using TaskManagerBackEnd.DTOs.Reminder;
+using TaskManagerBackend.DTOs.Tasks;
 using TaskManagerBackEnd.DTOs.User;
 using TaskManagerBackend.Models;
 
@@ -29,15 +30,24 @@ namespace TaskManagerBackend.Helpers
 
             // Map từ CategoryUpdateDto -> Category
             CreateMap<CategoriesUpdateDto, Category>();
-            
+
             // Map từ Reminder -> ReminderResponseDto
             CreateMap<Reminder, ReminderResponseDto>();
-            
+
             // Map từ ReminderCreateDto -> Reminder
             CreateMap<ReminderCreateDto, Reminder>();
-            
+
             // Map từ ReminderUpdateDto -> Reminder
             CreateMap<ReminderUpdateDto, Reminder>();
+
+            // Map từ TaskItem -> TaskResponseDto
+            CreateMap<TaskItem, TaskResponseDto>();
+            
+            // Map từ TaskCreateDto -> TaskItem
+            CreateMap<TaskCreateDto, TaskItem>();
+
+            // Map từ TaskUpdateDto -> TaskItem
+            CreateMap<TaskUpdateDto, TaskItem>();
         }
     }
 }
