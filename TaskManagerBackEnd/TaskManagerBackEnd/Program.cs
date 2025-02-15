@@ -1,11 +1,15 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Diagnostics;
 using TaskManagerBackend.Data;
 using Microsoft.EntityFrameworkCore;
+using TaskManagerBackend.Middlewares;
 using TaskManagerBackend.Models;
 using TaskManagerBackend.Repositories;
 using TaskManagerBackend.Services;
 using TaskManagerBackend.Services.Interface;
 using TaskManagerBackEnd.Services.Interface;
+
+// using TaskManagerBackEnd.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +58,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Thư viện bắt lỗi 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthorization();
